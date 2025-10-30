@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<form>
+    <label for="listing-name">Type the listing title</label>
+    <input id="listing-name" type="text" placeholder="Magical device..." minlength="3" required>
+    <br>
+    <label for="listing-description">Type the listing listing description</label>
+    <input id="listing-description" type="text" placeholder="Color red, big size, Tier: S+.." minlength="3" required>
+    <br>
+    <label for="starting-bid">Starting bid</label>
+    <input id="starting-bid" type="number" placeholder="$50" maxlength="4" size="6" required>
+    <br>
+    <label for="url-imagen">URL imagen (opcional)</label>
+    <input id="url-imagen" type="url">
+    <br>
+    <button type="submit">Enviar</button>
+</form>
+    
+{% endblock %}
