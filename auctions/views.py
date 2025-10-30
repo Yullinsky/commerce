@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment
@@ -94,3 +94,16 @@ def listing_view(request, listing_id):
     return render(request, "auctions/listing.html", {
         "listing":listing
     })
+
+def toggle_wishlist(request, listing_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if listing in request.user.wishlist.all():
+        request.user.wishlist.remove(listing)
+    else:
+        request.user.wishlist.add(listing)
+
+    return redirect("listing", listing_id=listing.id)

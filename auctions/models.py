@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    wishlist = models.ManyToManyField('Listing', blank=True, related_name="wishlisted_by")
 
 class Listing(models.Model) :
     title = models.CharField(max_length=100)
