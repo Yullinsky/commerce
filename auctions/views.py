@@ -8,7 +8,10 @@ from .models import User, Listing, Bid, Comment
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.filter(is_active=True)
+    return render(request, "auctions/index.html", {
+        "listings":listings
+    })
 
 
 def login_view(request):
@@ -63,5 +66,31 @@ def register(request):
         return render(request, "auctions/register.html")
 
 def create_listing(request):
-    if request.method != "POST":
-        return render(request, "auctions/create-listing.html")
+    if request.method == "POST":
+        # 1. Obtener los datos del formulario
+        title = request.POST["listing-name"]
+        description = request.POST["listing-description"]
+        starting_bid = request.POST ["starting-bid"]
+        image_url = request.POST.get("url-imagen", "")
+
+        # 2. Crear el objeto Listing
+        listing = Listing(
+            title=title,    
+            description=description,
+            starting_bid=starting_bid,
+            image_url = image_url,
+            owner = request.user
+        )
+
+        # 3. Guardar en la base de datos
+        listing.save()
+
+        # 4. Redirigir al index (buena práctica después de un POST)
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "auctions/create-listing.html")
+
+def listing_view(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    return render(request, "auctions/listing.html", {
+        "listing":listing
+    })

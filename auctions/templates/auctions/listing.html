@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="listing">   
+        <h3>{{ listing.title }}</h3>
+        <br>
+        <h3>description:</h3>
+        <p>{{ listing.description }}</p>
+        <p>Current price: ${{ listing.starting_bid }}</p>
+        {% if listing.image_url %}
+            <img src="{{listing.image_url}}" alt="image of: {{listing.title}}" width="200px">
+        {% endif%}
+        <br><br>
+        <form method="post" action="">
+        {% csrf_token %}
+        {% if listing.watchlisted %}
+            <button action> Remove from watchlist</button>
+        {% else %}
+            <button action> Add  to the watchlist</button>
+        {% endif %}
+        </form>
+    </div>
+{% endblock %}
