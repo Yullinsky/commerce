@@ -1,16 +1,16 @@
 :root {
     --shadow-s:
-    inset 0 1px 2px #ffffff30, /* top highlight */
+    inset 0 1px 2px #ffffff50, /* top highlight */
     0 1px 2px #00000030, /* dark shadow */
     0 2px 4px #00000015; /* soft shadow */
 
     --shadow-m:
-    inset 0 1px 2px #ffffff50, /* top highlight */
+    inset 0 1px 2px #ffffff60, /* top highlight */
     0 2px 4px #00000030, /* dark shadow */
     0 4px 8px #00000015; /* soft shadow */
 
     --shadow-l:
-    inset 0 1px 2px #ffffff70, /* top highlight */
+    inset 0 1px 2px #ffffff80, /* top highlight */
     0 4px 6px #00000030, /* dark shadow */
     0 6px 10px #00000015; /* soft shadow */
 }
@@ -18,14 +18,14 @@
 body {
     padding: 10px 20px;
     margin: 36px;
-    background-color: #161626;
+    background-color: #12100f;
     color: white;
 }
 
 .listing-list {
     display: flex;
     gap: 10px;
-    background-color: #242436;
+    background-color: #1b1816;
     padding: 20px 30px;
     border-radius: 12px;
     box-shadow: var(--shadow-s);
@@ -36,51 +36,70 @@ body {
         align-items: center;
         justify-content: center;
     }
+    
+    .listing:hover{
+        background-color: #f80;
+        padding: 10px 16px;
+    }
 }
-
-.listing {
-    background-color: #303044;
-    padding: 10px;
-    border-radius: 10px;
-    transition: all 0.25s ease-in-out;
+.listing, .nav-item {
+    background-color: #242221;
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
     box-shadow: var(--shadow-s);
+    
+    a{text-decoration: none;}
+
+    &:hover{
+        box-shadow: var(--shadow-l);
+    }
+}
+.listing {
+    padding: 10px;
     width: max-content;
 
-    img{
+    img, button{
         border-radius: 10px;
         display: block;
         margin: auto;
     }
 
-    a {
-        text-decoration: none;
+    button {
+        padding: 6px;
+        box-shadow: var(--shadow-s);
+        transition: all 0.2s ease-in-out;
+        border: none;
+        margin: 16px auto;
+        background-color: #f80;
         color: white;
+
+        &:hover{
+            box-shadow: var(--shadow-l);
+            padding: 6px 16px;
+        }
+    }
+
+    a {
+        color: white;
+        transition: all 0.1s ease-in-out;
     }
 
     &:hover{
-        background-color: #36364a;
         box-shadow: var(--shadow-l);
-        padding: 10px 16px;
+
+        a{color:#242221;}
     }
 }
 
 .nav-item {
-    background-color: #303044;
     padding: 6px 8px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-s);
     margin-right: 10px;
-    transition: all 0.25s ease-in-out;
     font-weight: 600;
 
-    a {
-        color: rgb(4, 138, 255);
-        text-decoration: none;
-    }
+    a {color: #048aff;}
 
     &:hover{
         background-color: #363652;
-        box-shadow: var(--shadow-l);
         padding: 6px 12px;
     }
 }

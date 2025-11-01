@@ -2,7 +2,11 @@
 
 {% block body %}
     <div class="listing">   
-        <h3>{{ listing.title }}</h3>
+        <h3>{{ listing.title }} 
+            {% if listing in user.wishlist.all %}
+                (Wishlisted)
+            {% endif %}
+        </h3>
         <br>
         <h3>description:</h3>
         <p>{{ listing.description }}</p>
@@ -10,7 +14,6 @@
         {% if listing.image_url %}
             <img src="{{listing.image_url}}" alt="image of: {{listing.title}}" width="200px">
         {% endif%}
-        <br><br>
 
         {% if user.is_authenticated and listing in user.wishlist.all %}
             <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
