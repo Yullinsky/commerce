@@ -95,6 +95,16 @@ def listing_view(request, listing_id):
         "listing":listing
     })
 
+def wishlist (request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    
+    wishlisted_listings = request.user.wishlist.all()
+    return render(request, "auctions/wishlist.html",{
+        "wishlist":wishlisted_listings
+    })
+
+
 def toggle_wishlist(request, listing_id):
     if not request.user.is_authenticated:
         return redirect("login")

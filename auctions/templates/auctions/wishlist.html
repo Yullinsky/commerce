@@ -1,0 +1,18 @@
+{% extends "auctions/layout.html"%}
+
+{% block body %}
+    <h2>Wishlist</h2>
+
+    <div class="listing-list">{% for wishlisted in wishlist %}
+        <div class="listing"><a href=" {% url 'listing' wishlisted.id %} ">
+            <h3> {{ wishlisted.title }} </h3>
+            <p> {{ wishlisted.description }}<br> Current price: ${{ wishlisted.starting_bid }}</p>
+            {% if wishlisted.image_url %}
+                <img src="{{ wishlisted.image_url }}" alt="{{ wishlisted.title }}" width="200">
+            {% endif %}
+        </a></div>
+    {% empty %}
+        <p>No hay listings Wishlisteados</p>
+    {% endfor %}</div>
+
+{% endblock  %}
