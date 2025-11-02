@@ -11,9 +11,19 @@
         <h3>description:</h3>
         <p>{{ listing.description }}</p>
         <p>Current price: ${{ listing.bid_amount }}</p>
+        
+
         {% if listing.image_url %}
             <img src="{{listing.image_url}}" alt="image of: {{listing.title}}" width="200px">
         {% endif%}
+
+        {% if user.is_authenticated %}
+            <form id="bid" method="POST" action="{% url 'place_bid' listing.id %}">
+                {% csrf_token %}
+                <input type="number" name="bid_amount" step="0.01" min="{{ listing.bid_amount }}" required>
+                <button type="submit">Place bid</button>
+            </form>
+        {% endif %}
 
         {% if user.is_authenticated and listing in user.wishlist.all %}
             <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
@@ -24,14 +34,6 @@
             <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to wishlist</button>
-            </form>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-            <form method="POST" action="{% url 'place_bid' listing.id %}">
-                {% csrf_token %}
-                <input type="number" name="bid_amount" step="0.01" min="{{ listing.bid_amount }}" required>
-                <button type="submit">Place bid</button>
             </form>
         {% endif %}
     </div>
