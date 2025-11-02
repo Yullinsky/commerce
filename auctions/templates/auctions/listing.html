@@ -18,11 +18,13 @@
         {% endif%}
 
         {% if user.is_authenticated %}
+        <div class="bid-section">
             <form id="bid" method="POST" action="{% url 'place_bid' listing.id %}">
                 {% csrf_token %}
-                <input type="number" name="bid_amount" step="0.01" min="{{ listing.bid_amount }}" required>
+                <input type="number" name="bid_amount" step="0.01" min="{{ listing.bid_amount }} " placeholder= "$20" required>
                 <button type="submit">Place bid</button>
             </form>
+        </div>
         {% endif %}
 
         {% if user.is_authenticated and listing in user.wishlist.all %}
