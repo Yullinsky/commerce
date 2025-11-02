@@ -6,7 +6,7 @@
     <div class="listing-list">{% for listing in listings %}
         <div class="listing"><a href=" {% url 'listing' listing.id %} ">
             <h3> {{ listing.title }} </h3>
-            <p> {{ listing.description }}<br> Current price: ${{ listing.starting_bid }}</p>
+            <p> {{ listing.description }}<br> Current price: ${{ listing.bid_amount }}</p>
             {% if listing.image_url %}
                 <img src="{{ listing.image_url }}" alt="{{ listing.title }}" width="200">
             {% endif %}
