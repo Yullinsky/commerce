@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -6,6 +7,7 @@ from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment
 
+from decimal import Decimal, InvalidOperation
 
 def index(request):
     listings = Listing.objects.filter(is_active=True)
@@ -70,14 +72,22 @@ def create_listing(request):
         # 1. Obtener los datos del formulario
         title = request.POST["listing-name"]
         description = request.POST["listing-description"]
-        starting_bid = request.POST ["starting-bid"]
+        starting_bid_raw = request.POST ["starting-bid"]
         image_url = request.POST.get("url-imagen", "")
+
+        #Convertir y validar el starting_bid
+        try:
+            starting_bid = Decimal(starting_bid_raw)
+        except (InvalidOperation, ValueError):
+            messages.error (request, "Invalid starting bid amount.")
+            return render (request, "auctions/create-listing.html")
 
         # 2. Crear el objeto Listing
         listing = Listing(
             title=title,    
-            description=description,
-            starting_bid=starting_bid,
+            description = description,
+            starting_bid = starting_bid,
+            bid_amount = starting_bid,
             image_url = image_url,
             owner = request.user
         )
@@ -88,6 +98,44 @@ def create_listing(request):
         # 4. Redirigir al index (buena práctica después de un POST)
         return HttpResponseRedirect(reverse("index"))
     return render(request, "auctions/create-listing.html")
+
+def place_bid(request, listing_id):
+    if request.method == "POST":
+        # 1. Verificar que esté loggedo
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to place a bid.")
+            return redirect("login")
+
+        # 2. Verificar que se haya proporcionado una cantidad de puja
+        bid_amount_raw = request.POST.get("bid_amount")
+        if not bid_amount_raw:
+            messages.error(request, "Bid amount is required.")
+            return redirect("listing", listing_id) 
+        
+        # 2.1 Convertir y validar la cantidad de puja
+        try:
+            bid_amount = Decimal(bid_amount_raw)
+        except (InvalidOperation, ValueError):
+            messages.error(request, "Invalid bid amount.")
+            return redirect("listing", listing_id)
+        
+        listing = get_object_or_404(Listing, pk=listing_id)
+
+        # 3. Validar que la puja sea mayor que la puja actual
+        if bid_amount <= listing.bid_amount:
+            messages.error(request, "Your bid must be higher than the current bid.")
+            return redirect("listing", listing_id)
+
+        # Actualizar la puja y el Bidder
+        bid = Bid(bidder=request.user, listing=listing, amount=bid_amount)
+        bid.save()
+
+        listing.bid_amount = bid_amount
+        listing.save()
+
+        messages.success(request, "Your bid was placed successfully!")
+        return redirect("listing", listing_id)
+    return redirect("listing", listing_id)
 
 def listing_view(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -117,11 +165,3 @@ def toggle_wishlist(request, listing_id):
         request.user.wishlist.add(listing)
 
     return redirect("listing", listing_id=listing.id)
-
-def place_bid(request, listing_id):
-    if request.method == "POST":
-        bid_amount = request.POST.get("bid_amount")
-        if not bid_amount:
-            return redirect("listing", listing_id) 
-        # TODO: validate bid, save bid, add messages, etc.
-    return redirect("listing", listing_id)

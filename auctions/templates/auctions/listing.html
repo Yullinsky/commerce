@@ -10,7 +10,7 @@
         <br>
         <h3>description:</h3>
         <p>{{ listing.description }}</p>
-        <p>Current price: ${{ listing.starting_bid }}</p>
+        <p>Current price: ${{ listing.bid_amount }}</p>
         {% if listing.image_url %}
             <img src="{{listing.image_url}}" alt="image of: {{listing.title}}" width="200px">
         {% endif%}
@@ -29,10 +29,10 @@
 
         {% if user.is_authenticated %}
             <form method="POST" action="{% url 'place_bid' listing.id %}">
-                {%csrf_token%}
-                <input type="number" name="bid_amount" step="0.01" min="{{ listing.starting_bid }}" required> 
+                {% csrf_token %}
+                <input type="number" name="bid_amount" step="0.01" min="{{ listing.bid_amount }}" required>
                 <button type="submit">Place bid</button>
             </form>
-        {% endif%}
+        {% endif %}
     </div>
 {% endblock %}
