@@ -80,7 +80,7 @@ button {
         margin: 12px auto;
 
         input {
-            width: 75px;
+            width: 150px;
             padding: 5px;
             border: none;
             box-shadow: var(--shadow-s);
