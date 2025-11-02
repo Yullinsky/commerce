@@ -26,5 +26,13 @@
                 <button type="submit">Add to wishlist</button>
             </form>
         {% endif %}
+
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'place_bid' listing.id %}">
+                {%csrf_token%}
+                <input type="number" name="bid_amount" step="0.01" min="{{ listing.starting_bid }}" required> 
+                <button type="submit">Place bid</button>
+            </form>
+        {% endif%}
     </div>
 {% endblock %}

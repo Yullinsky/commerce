@@ -117,3 +117,11 @@ def toggle_wishlist(request, listing_id):
         request.user.wishlist.add(listing)
 
     return redirect("listing", listing_id=listing.id)
+
+def place_bid(request, listing_id):
+    if request.method == "POST":
+        bid_amount = request.POST.get("bid_amount")
+        if not bid_amount:
+            return redirect("listing", listing_id) 
+        # TODO: validate bid, save bid, add messages, etc.
+    return redirect("listing", listing_id)
