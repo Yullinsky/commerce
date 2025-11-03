@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body%}
+    {% if category %}
+        <ul> 
+            {% for category in categories%}
+                <li>
+                    <a>{{ listing.category }}</a>
+                </li>
+            {% endfor%}
+        </ul>
+    {% else %}
+        <h3>There is no items with categories.</h3>
+    {% endif %}
+{% endblock %}

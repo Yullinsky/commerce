@@ -67,6 +67,9 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+def categories(request):
+    return render(request, "auctions/categories.html")
+
 def create_listing(request):
     if request.method == "POST":
         # 1. Obtener los datos del formulario
