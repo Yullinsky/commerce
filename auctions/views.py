@@ -110,21 +110,21 @@ def place_bid(request, listing_id):
         bid_amount_raw = request.POST.get("bid_amount")
         if not bid_amount_raw:
             messages.error(request, "Bid amount is required.")
-            return redirect("listing", listing_id) 
+            return redirect("listing", listing_id=listing_id) 
         
         # 2.1 Convertir y validar la cantidad de puja
         try:
             bid_amount = Decimal(bid_amount_raw)
         except (InvalidOperation, ValueError):
             messages.error(request, "Invalid bid amount.")
-            return redirect("listing", listing_id)
+            return redirect("listing", listing_id=listing_id)
         
         listing = get_object_or_404(Listing, pk=listing_id)
 
         # 3. Validar que la puja sea mayor que la puja actual
         if bid_amount <= listing.bid_amount:
             messages.error(request, "Your bid must be higher than the current bid.")
-            return redirect("listing", listing_id)
+            return redirect("listing", listing_id=listing_id)
 
         # Actualizar la puja y el Bidder
         bid = Bid(bidder=request.user, listing=listing, amount=bid_amount)
@@ -134,13 +134,15 @@ def place_bid(request, listing_id):
         listing.save()
 
         messages.success(request, "Your bid was placed successfully!")
-        return redirect("listing", listing_id)
-    return redirect("listing", listing_id)
+        return redirect("listing", listing_id=listing_id)
+    return redirect("listing", listing_id=listing_id)
 
 def listing_view(request, listing_id):
-    listing = Listing.objects.get(pk=listing_id)
+    listing = get_object_or_404(Listing, pk=listing_id)
+    comments = listing.comments.all() 
     return render(request, "auctions/listing.html", {
-        "listing":listing
+        "listing": listing,
+        "comments": comments
     })
 
 def wishlist (request):
@@ -165,3 +167,32 @@ def toggle_wishlist(request, listing_id):
         request.user.wishlist.add(listing)
 
     return redirect("listing", listing_id=listing.id)
+
+def add_comment(request, listing_id):
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "You must be logged in to add a comment.")
+            return redirect("login")
+
+        comment_text = request.POST.get("comment_text", "").strip()
+        if not comment_text:
+            messages.error(request, "Comment cannot be empty.")
+            return redirect("listing", listing_id=listing_id)
+
+        listing = get_object_or_404(Listing, pk=listing_id)
+
+        try:
+            comment = Comment(
+                user=request.user,
+                text=comment_text,
+                listing=listing
+            )
+            comment.save()
+            messages.success(request, "Your comment was added successfully!")
+
+        except Exception as e:
+            messages.error(request, "An error ocurred while adding your comment.")
+            print(e)
+
+        return redirect("listing", listing_id=listing_id)
+    return redirect("listing", listing_id=listing_id)

@@ -3,18 +3,20 @@
 {% block body %}
 <form method="post" action="{% url 'create-listing' %}">
     {% csrf_token %}
-    <label for="listing-name">Type the listing title</label>
+    <label for="listing-name">Listing title: </label>
     <input id="listing-name" name="listing-name" type="text" placeholder="Magical device..." minlength="3" required>
     <br>
-    <label for="listing-description">Type the listing listing description</label>
+    <label for="listing-description">Listing description: </label>
     <input id="listing-description" name="listing-description" type="text" placeholder="Color red, big size, Tier: S+.." minlength="3" required>
     <br>
-    <label for="starting-bid">Starting bid</label>
+    <label for="starting-bid">Starting bid: </label>
     <input id="starting-bid" name="starting-bid" type="number" step="0.01" placeholder="$50" size="6" required>
     <br>
-    <label for="url-imagen">URL imagen (opcional)</label>
+    <label for="url-imagen">URL imagen (opcional): </label>
     <input id="url-imagen" name="url-imagen" type="url">
+    <br>
+    <label for="category">Category: </label>
+    <input id="category" name="category" type="text" placeholder="Magic">
     <button type="submit">Enviar</button>
 </form>
-    
 {% endblock %}
