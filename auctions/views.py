@@ -67,6 +67,19 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+def category_list(request):
+    category_list = Listing.objects.values_list('category', flat=True).distinct()
+    return render (request, "auctions/category-list.html",{
+        "category_list": category_list
+    })
+
+def category_view(request, category_name):
+    listings = Listing.objects.filter(category=category_name, is_active=True)
+    return render(request, "auctions/category.html",{
+        "category": category_name,
+        "listings": listings
+    })
+
 def create_listing(request):
     if request.method == "POST":
         # 1. Obtener los datos del formulario
@@ -74,6 +87,7 @@ def create_listing(request):
         description = request.POST["listing-description"]
         starting_bid_raw = request.POST ["starting-bid"]
         image_url = request.POST.get("url-imagen", "")
+        category = request.POST["category"]
 
         #Convertir y validar el starting_bid
         try:
@@ -89,6 +103,7 @@ def create_listing(request):
             starting_bid = starting_bid,
             bid_amount = starting_bid,
             image_url = image_url,
+            category = category,
             owner = request.user
         )
 
