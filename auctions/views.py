@@ -70,7 +70,7 @@ def register(request):
 def category_list(request):
     category_list = Listing.objects.values_list('category', flat=True).distinct()
     return render (request, "auctions/category-list.html",{
-        "category-list": category_list
+        "category_list": category_list
     })
 
 def category_view(request, category_name):
