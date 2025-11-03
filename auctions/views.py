@@ -74,6 +74,7 @@ def create_listing(request):
         description = request.POST["listing-description"]
         starting_bid_raw = request.POST ["starting-bid"]
         image_url = request.POST.get("url-imagen", "")
+        category = request.POST["category"]
 
         #Convertir y validar el starting_bid
         try:
@@ -89,6 +90,7 @@ def create_listing(request):
             starting_bid = starting_bid,
             bid_amount = starting_bid,
             image_url = image_url,
+            category = category,
             owner = request.user
         )
 
