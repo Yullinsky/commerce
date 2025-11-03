@@ -67,8 +67,18 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-def categories(request):
-    return render(request, "auctions/categories.html")
+def category_list(request):
+    category_list = Listing.objects.values_list('category', flat=True).distinct()
+    return render (request, "auctions/category-list.html",{
+        "category-list": category_list
+    })
+
+def category_view(request, category_name):
+    listings = Listing.objects.filter(category=category_name, is_active=True)
+    return render(request, "auctions/category.html",{
+        "category": category_name,
+        "listings": listings
+    })
 
 def create_listing(request):
     if request.method == "POST":
