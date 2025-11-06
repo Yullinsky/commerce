@@ -22,7 +22,7 @@ body {
     color: white;
 }
 
-.comments-section{
+.comments-section {
     display: inline-block;
     width: 80vw;
     background-color: #1b1816;
@@ -30,13 +30,13 @@ body {
     border-radius: 12px;
     box-shadow: var(--shadow-s);
     gap: 10px;
+}
 
-    .comment {
-        background-color: #242221;
-        box-shadow: var(--shadow-m);
-        border-radius: 12px;
-        padding: 0 10px;
-    }
+.comments-section .comment {
+    background-color: #242221;
+    box-shadow: var(--shadow-m);
+    border-radius: 12px;
+    padding: 0 10px;
 }
 
 .listing-list {
@@ -48,29 +48,36 @@ body {
     box-shadow: var(--shadow-s);
     width: max-content;
     text-decoration: none;
-
-    h3, p, img{
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .listing:hover{
-        background-color: #f82;
-        padding: 10px 16px;
-    }
 }
 
-.listing, .nav-item {
+.listing-list h3,
+.listing-list p,
+.listing-list img {
+    align-items: center;
+    justify-content: center;
+}
+
+.listing-list .listing:hover {
+    background-color: #f82;
+    padding: 10px 16px;
+}
+
+.listing,
+.nav-item {
     background-color: #242221;
     border-radius: 12px;
     transition: all 0.2s ease-in-out;
     box-shadow: var(--shadow-s);
-    
-    a{text-decoration: none;}
+}
 
-    &:hover{
-        box-shadow: var(--shadow-l);
-    }
+.listing a,
+.nav-item a {
+    text-decoration: none;
+}
+
+.listing:hover,
+.nav-item:hover {
+    box-shadow: var(--shadow-l);
 }
 
 button {
@@ -80,73 +87,79 @@ button {
     border: none;
     background-color: #f82;
     color: white;
+}
 
-    &:hover {
-        box-shadow: var(--shadow-l);
-        padding: 6px 16px;
-    }
+button:hover {
+    box-shadow: var(--shadow-l);
+    padding: 6px 16px;
 }
 
 .listing {
     padding: 10px;
     width: max-content;
+}
 
-    div.bid-section {
-        display: flex;
-        justify-content: center;
-        margin: 12px auto;
+.listing div.bid-section {
+    display: flex;
+    justify-content: center;
+    margin: 12px auto;
+}
 
-        input {
-            width: 150px;
-            padding: 5px;
-            border: none;
-            box-shadow: var(--shadow-s);
+.listing div.bid-section input {
+    width: 150px;
+    padding: 5px;
+    border: none;
+    box-shadow: var(--shadow-s);
+}
 
-            &:hover {
-                box-shadow: var(--shadow-l);
-            }
-        }
-    }
+.listing div.bid-section input:hover {
+    box-shadow: var(--shadow-l);
+}
 
-    img, button, input{
-        border-radius: 10px;
-        display: block;
-        margin: auto;
-    }
+.listing img,
+.listing button,
+.listing input {
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+}
 
-    img{
-        width: 300px;
-        max-height: 180px;
-        object-fit:contain;
-    }
+.listing img {
+    width: 300px;
+    max-height: 180px;
+    object-fit: contain;
+}
 
-    form#bid {
-        display: flex;            
-        align-items: center;       
-        gap: 12px;           
-    }
+.listing form#bid {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-    a {
-        color: white;
-        transition: all 0.1s ease-in-out;
-    }
+.listing a {
+    color: white;
+    transition: all 0.1s ease-in-out;
+}
 
-    &:hover{
-        box-shadow: var(--shadow-l);
+.listing:hover {
+    box-shadow: var(--shadow-l);
+}
 
-        a{color:#242221;}
-    }
+.listing:hover a {
+    color: #242221;
 }
 
 .nav-item {
     padding: 6px 8px;
     margin-right: 10px;
     font-weight: 600;
+}
 
-    a {color: #048aff;}
+.nav-item a {
+    color: #048aff;
+}
 
-    &:hover{
-        background-color: #363652;
-        padding: 6px 12px;
-    }
+.nav-item:hover {
+    background-color: #363652;
+    padding: 6px 12px;
 }
