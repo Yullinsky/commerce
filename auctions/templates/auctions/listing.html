@@ -1,6 +1,20 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    {% if not listing.is_active and user.is_authenticated and user == listing.winner %}
+        <div class="alert alert-success" role="alert">
+            Congratulation <strong>{{ user.username }}</strong>. You've won this auction!
+        </div>
+    {% elif not listing.is_active and not listing.winner %}
+        <div class="alert alert-success" role="alert">
+            This auction have been closed without a winner.
+        </div>
+    {% elif not listing.is_active and user != listing.winner %}
+        <div class="alert alert-success" role="alert">
+            This auction have been closed. The auction winner is <strong>{{ listing.winner.username }}</strong>.
+        </div>
+    {% endif %}
+
     <div class="listing">   
         <h3>{{ listing.title }} 
             {% if listing in user.wishlist.all %}
@@ -37,6 +51,14 @@
             <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to wishlist</button>
+            </form>
+        {% endif %}
+
+        {% if listing.is_active and user.is_authenticated and user == listing.owner %}
+            <form method="POST" action="{% url 'close-auction' listing.id %}">
+                {% csrf_token %}
+                <br>
+                <button class="btn btn-danger" type="submit">Close listing</button>
             </form>
         {% endif %}
     </div>

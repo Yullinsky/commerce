@@ -125,7 +125,7 @@ button:hover {
 }
 
 .listing img {
-    width: 300px;
+    max-width: 400px;
     max-height: 180px;
     object-fit: contain;
 }

@@ -14,6 +14,7 @@ class Listing(models.Model) :
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
     image_url = models.URLField(blank=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
+    winner = models.ForeignKey(User,on_delete=models.SET_NULL, blank=True, null=True, related_name="auctions_won")
     category = models.CharField (max_length=100, blank=True, null=True)
     is_active = models.BooleanField (default=True)
 

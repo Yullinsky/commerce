@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -113,6 +114,36 @@ def create_listing(request):
         # 4. Redirigir al index (buena práctica después de un POST)
         return HttpResponseRedirect(reverse("index"))
     return render(request, "auctions/create-listing.html")
+
+@login_required
+def close_auction(request, listing_id):
+    if request.method != "POST":
+        messages.error(request, "Método no permitido.")
+        return redirect("listing", listing_id=listing_id)
+
+    listing = get_object_or_404(Listing, pk=listing_id)
+    
+    if request.user != listing.owner:
+        messages.error(request, "No tienes permiso para cerrar esta subasta.")
+        return redirect("listing", listing_id=listing_id)
+
+    if not listing.is_active:
+        messages.error(request, "Esta subasta ya está cerrada.")
+        return redirect("listing", listing_id=listing_id)
+    
+    highest_bid = listing.bids.order_by('-amount').first()
+    listing.is_active = False
+
+    if highest_bid:
+        listing.winner = highest_bid.bidder
+        listing.bid_amount = highest_bid.amount
+        messages.success(request, f"Auction closed! The winner is {listing.winner.username} with a bid of ${listing.bid_amount}")
+    else:
+        listing.winner = None
+        messages.success(request, f"Auction closed! There were not bids")
+    
+    listing.save()
+    return redirect("listing", listing_id=listing_id)
 
 def place_bid(request, listing_id):
     if request.method == "POST":
