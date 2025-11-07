@@ -47,7 +47,7 @@
                 {% csrf_token %}
                 <button type="submit">Remove from wishlist</button>
             </form>
-        {% else %}
+        {% elif user.is_authenticated%}
             <form method="POST" action="{% url 'toggle_wishlist' listing.id %}">
                 {% csrf_token %}
                 <button type="submit">Add to wishlist</button>
