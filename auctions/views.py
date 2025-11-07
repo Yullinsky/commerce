@@ -36,7 +36,7 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -140,19 +140,15 @@ def close_auction(request, listing_id):
         messages.success(request, f"Auction closed! The winner is {listing.winner.username} with a bid of ${listing.bid_amount}")
     else:
         listing.winner = None
-        messages.success(request, f"Auction closed! There were not bids")
+        messages.success(request, f"Auction closed! There were no bids")
     
     listing.save()
     return redirect("listing", listing_id=listing_id)
 
+@login_required
 def place_bid(request, listing_id):
     if request.method == "POST":
-        # 1. Verificar que esté loggedo
-        if not request.user.is_authenticated:
-            messages.error(request, "You must be logged in to place a bid.")
-            return redirect("login")
 
-        # 2. Verificar que se haya proporcionado una cantidad de puja
         bid_amount_raw = request.POST.get("bid_amount")
         if not bid_amount_raw:
             messages.error(request, "Bid amount is required.")
@@ -191,20 +187,15 @@ def listing_view(request, listing_id):
         "comments": comments
     })
 
+@login_required
 def wishlist (request):
-    if not request.user.is_authenticated:
-        return redirect("login")
-    
     wishlisted_listings = request.user.wishlist.all()
     return render(request, "auctions/wishlist.html",{
         "wishlist":wishlisted_listings
     })
 
-
+@login_required
 def toggle_wishlist(request, listing_id):
-    if not request.user.is_authenticated:
-        return redirect("login")
-
     listing = get_object_or_404(Listing, pk=listing_id)
 
     if listing in request.user.wishlist.all():
@@ -214,12 +205,9 @@ def toggle_wishlist(request, listing_id):
 
     return redirect("listing", listing_id=listing.id)
 
+@login_required
 def add_comment(request, listing_id):
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request, "You must be logged in to add a comment.")
-            return redirect("login")
-
         comment_text = request.POST.get("comment_text", "").strip()
         if not comment_text:
             messages.error(request, "Comment cannot be empty.")
@@ -237,7 +225,7 @@ def add_comment(request, listing_id):
             messages.success(request, "Your comment was added successfully!")
 
         except Exception as e:
-            messages.error(request, "An error ocurred while adding your comment.")
+            messages.error(request, "An error occurred while adding your comment.")
             print(e)
 
         return redirect("listing", listing_id=listing_id)
