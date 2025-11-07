@@ -119,17 +119,17 @@ def create_listing(request):
 @login_required
 def close_auction(request, listing_id):
     if request.method != "POST":
-        messages.error(request, "Método no permitido.")
+        messages.error(request, "Not valid method.")
         return redirect("listing", listing_id=listing_id)
 
     listing = get_object_or_404(Listing, pk=listing_id)
     
     if request.user != listing.owner:
-        messages.error(request, "No tienes permiso para cerrar esta subasta.")
+        messages.error(request, "You can't close this this auction.")
         return redirect("listing", listing_id=listing_id)
 
     if not listing.is_active:
-        messages.error(request, "Esta subasta ya está cerrada.")
+        messages.error(request, "This auction is already closed.")
         return redirect("listing", listing_id=listing_id)
     
     highest_bid = listing.bids.order_by('-amount').first()
