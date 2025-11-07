@@ -81,6 +81,7 @@ def category_view(request, category_name):
         "listings": listings
     })
 
+@login_required
 def create_listing(request):
     if request.method == "POST":
         # 1. Obtener los datos del formulario
