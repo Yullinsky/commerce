@@ -4,3 +4,5 @@ __pycache__/
 
 # Ignorar la base de datos local
 db.sqlite3
+
+venv/
